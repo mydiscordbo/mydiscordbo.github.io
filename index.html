@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Block Explorer</title>
-    <script src="https://insight.vkax.xyz/socket.io/socket.io.js"></script>
-    <script src="app.js"></script>
-  </head>
-  <body>
-    <h1>Block Explorer</h1>
-    <div id="block-height"></div>
-    <div id="block-hash"></div>
-    <div id="peers"></div>
-  </body>
+<head>
+    <title>Blockchain Info</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Blockchain Info</h1>
+    <div id="info"></div>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: 'https://insight.vkax.xyz/insight-api/status?q=getInfo',
+                type: 'GET',
+                success: function (data) {
+                    var html = '<p><strong>Blocks:</strong> ' + data.blocks + '</p>';
+                    html += '<p><strong>Difficulty:</strong> ' + data.difficulty + '</p>';
+                    html += '<p><strong>Network Hashrate:</strong> ' + data.networkhashps + ' hashes per second</p>';
+                    html += '<p><strong>Chain:</strong> ' + data.chain + '</p>';
+                    $('#info').html(html);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+</body>
 </html>
