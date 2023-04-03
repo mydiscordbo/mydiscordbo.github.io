@@ -16,10 +16,11 @@
 		fetch('https://insight.vkax.xyz/insight-api/status?q=getInfo')
 			.then(response => response.json())
 			.then(data => {
-				document.getElementById("blocks").innerHTML = data.blocks.toLocaleString();
-				document.getElementById("difficulty").innerHTML = data.difficulty.toLocaleString();
-				document.getElementById("hashrate").innerHTML = (data.hashrate / 1000000).toFixed(2);
-				document.getElementById("size").innerHTML = (data.size_on_disk / 1000000).toFixed(2);
+			
+				document.getElementById("blocks").innerHTML = data.info.blocks.toLocaleString();
+				document.getElementById("difficulty").innerHTML = data.info.difficulty.toLocaleString();
+				document.getElementById("hashrate").innerHTML = (data.info.hashrate / 1000000).toFixed(2);
+				document.getElementById("size").innerHTML = (data.info.size_on_disk / 1000000).toFixed(2);
 				document.getElementById("lastblock").innerHTML = `${data.last_block_apple_pay_time} (${data.last_block_height.toLocaleString()})`;
 			})
 			.catch(error => console.error(error));
