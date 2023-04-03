@@ -2,26 +2,59 @@
 <html>
 <head>
 	<title>Blockchain Info</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f7f7f7;
+			padding: 20px;
+			margin: 0;
+		}
+		h1 {
+			font-size: 36px;
+			margin-bottom: 10px;
+		}
+		table {
+			border-collapse: collapse;
+			margin-top: 20px;
+			margin-bottom: 40px;
+		}
+		th, td {
+			padding: 10px;
+			border: 1px solid #ccc;
+			text-align: left;
+		}
+		th {
+			background-color: #ddd;
+		}
+	</style>
 </head>
 <body>
 	<h1>Blockchain Info</h1>
-	<div id="info">
-		<p>Blocks: <span id="blocks"></span></p>
-		<p>Difficulty: <span id="difficulty"></span></p>
-		<p>Hash rate: <span id="hashrate"></span> hashes/second</p>
-		<p>Chain size: <span id="size"></span> MB</p>
-		<p>Last block: <span id="lastblock"></span></p>
-	</div>
+	<table>
+		<tr>
+			<th>Blocks</th>
+			<td id="blocks"></td>
+		</tr>
+		<tr>
+			<th>Difficulty</th>
+			<td id="difficulty"></td>
+		</tr>
+		<tr>
+			<th>Block Hash</th>
+			<td id="blockhash"></td>
+		</tr>
+	</table>
 	<script>
 		fetch('https://insight.vkax.xyz/insight-api/status?q=getInfo')
 			.then(response => response.json())
 			.then(data => {
-			
-				document.getElementById("blocks").innerHTML = data.info.blocks.toLocaleString();
-				document.getElementById("difficulty").innerHTML = data.info.difficulty.toLocaleString();
-				document.getElementById("hashrate").innerHTML = (data.info.hashrate / 1000000).toFixed(2);
-				document.getElementById("size").innerHTML = (data.info.size_on_disk / 1000000).toFixed(2);
-				document.getElementById("lastblock").innerHTML = `${data.last_block_apple_pay_time} (${data.last_block_height.toLocaleString()})`;
+				document.getElementById('blocks').textContent = data.info.blocks;
+				document.getElementById('difficulty').textContent = data.info.difficulty;
+				fetch(`https://insight.vkax.xyz/insight-api/block/${data.info.bestblockhash}`)
+					.then(response => response.json())
+					.then(blockData => {
+						document.getElementById('blockhash').textContent = blockData.hash;
+					})
 			})
 			.catch(error => console.error(error));
 	</script>
