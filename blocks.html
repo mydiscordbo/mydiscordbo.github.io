@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Blockchain Info</title>
+</head>
+<body>
+	<h1>Blockchain Info</h1>
+	<p>Blocks: <span id="block-count"></span></p>
+	<p>Difficulty: <span id="difficulty"></span></p>
+	<p>Block Hash: <span id="block-hash"></span></p>
+	<script>
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', 'https://insight.vkax.xyz/insight-api/status', true);
+		xhr.onload = function() {
+			if (xhr.status === 200) {
+				var data = JSON.parse(xhr.responseText);
+				document.getElementById('block-count').textContent = data.info.blocks;
+				document.getElementById('difficulty').textContent = data.info.difficulty;
+			} else {
+				console.log('Error getting blockchain info');
+			}
+		};
+		xhr.send();
+
+		var blockXhr = new XMLHttpRequest();
+		blockXhr.open('GET', 'https://insight.vkax.xyz/insight-api/blocks?limit=1', true);
+		blockXhr.onload = function() {
+			if (blockXhr.status === 200) {
+				var data = JSON.parse(blockXhr.responseText);
+				document.getElementById('block-hash').textContent = data.blocks[0].hash;
+			} else {
+				console.log('Error getting block hash');
+			}
+		};
+		blockXhr.send();
+	</script>
+</body>
+</html>
