@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Blockchain Info</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<title>Blockchain Info</title>
 </head>
 <body>
-    <h1>Blockchain Info</h1>
-    <div id="info"></div>
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: 'https://insight.vkax.xyz/insight-api/status?q=getInfo',
-                type: 'GET',
-                success: function (data) {
-                    var html = '<p><strong>Blocks:</strong> ' + data.blocks + '</p>';
-                    html += '<p><strong>Difficulty:</strong> ' + data.difficulty + '</p>';
-                    html += '<p><strong>Network Hashrate:</strong> ' + data.networkhashps + ' hashes per second</p>';
-                    html += '<p><strong>Chain:</strong> ' + data.chain + '</p>';
-                    $('#info').html(html);
-                },
-                error: function (xhr, status, error) {
-                    console.log(error);
-                }
-            });
-        });
-    </script>
+	<h1>Blockchain Info</h1>
+	<div id="info">
+		<p>Blocks: <span id="blocks"></span></p>
+		<p>Difficulty: <span id="difficulty"></span></p>
+		<p>Hash rate: <span id="hashrate"></span> hashes/second</p>
+		<p>Chain size: <span id="size"></span> MB</p>
+		<p>Last block: <span id="lastblock"></span></p>
+	</div>
+	<script>
+		fetch('https://insight.vkax.xyz/insight-api/status?q=getInfo')
+			.then(response => response.json())
+			.then(data => {
+				document.getElementById("blocks").innerHTML = data.blocks.toLocaleString();
+				document.getElementById("difficulty").innerHTML = data.difficulty.toLocaleString();
+				document.getElementById("hashrate").innerHTML = (data.hashrate / 1000000).toFixed(2);
+				document.getElementById("size").innerHTML = (data.size_on_disk / 1000000).toFixed(2);
+				document.getElementById("lastblock").innerHTML = `${data.last_block_apple_pay_time} (${data.last_block_height.toLocaleString()})`;
+			})
+			.catch(error => console.error(error));
+	</script>
 </body>
 </html>
